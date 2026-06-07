@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الهيئة العامة للتحقيق في الكوارث الاجتماعية</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        aref: ['Aref Ruqaa', 'serif'],
+                    },
+                    colors: {
+                        premium: {
+                            dark: '#0f051d',
+                            card: 'rgba(30, 15, 50, 0.7)',
+                            border: 'rgba(236, 72, 153, 0.2)',
+                            gold: '#d4af37'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f051d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #db2777;
+            border-radius: 4px;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0f051d;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(219, 39, 119, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%);
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .text-glow {
+            text-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+        }
+        .text-glow-gold {
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+        .ticker-wrap {
+            background: linear-gradient(90deg, #991b1b, #dc2626, #991b1b);
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .ticker-item {
+            animation: ticker 25s linear infinite;
+        }
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 40;
+        }
+        .balloon {
+            position: fixed;
+            bottom: -100px;
+            opacity: 0.8;
+            z-index: 45;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen selection:bg-pink-600 selection:text-white">
+
+    <div id="particle-container" class="fixed inset-0 pointer-events:none z-0"></div>
+
+    <div class="ticker-wrap fixed top-0 left-0 right-0 h-10 overflow-hidden flex items-center z-50 shadow-2xl border-b border-red-500">
+        <div class="ticker-item whitespace-nowrap text-sm md:text-base font-black flex items-center gap-8 text-white">
+            <span>🚨 عاجل: انعقاد اللجنة العليا لتفكيك الأزمات العاطفية وإدارة الكوارث بين الصحاب 🚨</span>
+            <span>انتبه: منسوب الزعل يقترب من الخط الأحمر والسبب تصرف متهور 🚨</span>
+            <span>التقرير الإداري: المتهم مسالم في الأصل ولكنه يفتقد لخاصية المراجعة قبل الضغط على زر الإرسال 🚨</span>
+        </div>
+    </div>
+
+    <main class="relative z-10 pt-16 max-w-4xl mx-auto px-4 pb-24 space-y-16">
+
+        <section id="opening-scene" class="min-h-[85vh] flex flex-col justify-center items-center text-center space-y-8">
+            <div class="relative">
+                <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 blur-2xl opacity-75 animate-pulse"></div>
+                <div class="relative bg-premium-dark p-8 rounded-full border border-pink-500 text-6xl md:text-7xl shadow-2xl">
+                    🧐
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <h1 class="text-red-500 text-2xl md:text-4xl font-black tracking-widest animate-bounce text-glow">🚨 خبر عاجل 🚨</h1>
+                <h2 class="text-3xl md:text-5xl font-extrabold font-aref text-glow-gold text-premium-gold">الهيئة العامة للتحقيق في الكوارث الاجتماعية</h2>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 rounded-3xl max-w-xl border-l-4 border-l-red-500 shadow-2xl transform hover:scale-[1.01] transition-transform">
+                <p class="text-lg md:text-xl leading-relaxed font-medium text-gray-200">
+                    "تم رصد حالة كارثية من الزعل المفاجئ وغير المتوقع. تشير التحقيقات الأولية الموثقة إلى تورط صريح للمتهم في اتخاذ قرارات عشوائية وتصريحات غير مدروسة عواقبها وخيمة."
+                </p>
+            </div>
+
+            <button id="start-investigation-btn" class="group relative px-12 py-5 bg-gradient-to-r from-red-600 to-pink-600 rounded-2xl text-xl md:text-2xl font-black tracking-wider shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_rgba(219,39,119,0.6)] transform transition-all duration-300 active:scale-95 overflow-hidden">
+                <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-white/20 to-transparent transform -translateX-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></span>
+                🔍 بدء التحقيق الفوري
+            </button>
+        </section>
+
+
+        <section id="section-profile" class="hidden opacity-0 space-y-6 scroll-mt-20">
+            <div class="text-center">
+                <span class="text-sm font-bold uppercase tracking-widest text-pink-500 bg-pink-500/10 px-4 py-1.5 rounded-full border border-pink-500/30">البند الأول</span>
+                <h3 class="text-2xl md:text-4xl font-black mt-2">📂 الملف الجنائي للمشتبه به</h3>
+            </div>
+
+            <div class="glass-card rounded-[2.5rem] p-6 md:p-10 shadow-2xl relative overflow-hidden border border-white/10">
+                <div class="absolute -top-10 -left-10 text-[10rem] opacity-5 pointer-events-none select-none">🕵️‍♂️</div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                            <span class="text-gray-400 font-bold"><i class="fa-solid fa-user ml-2 text-pink-500"></i> الاسم الثلاثي:</span>
+                            <span class="font-black text-lg text-pink-400">[ضع اسمي هنا]</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                            <span class="text-gray-400 font-bold"><i class="fa-solid fa-gavel ml-2 text-red-500"></i> التهمة الثابتة:</span>
+                            <span class="font-black text-red-400 text-sm md:text-base">اتخاذ قرارات غير مدروسة بالمرة</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                            <span class="text-gray-400 font-bold"><i class="fa-solid fa-heart-crack ml-2 text-orange-500"></i> حجم الأضرار:</span>
+                            <span class="font-black text-orange-400">زعل مفاجئ كاد يفسد المود العام</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                            <span class="text-gray-400 font-bold"><i class="fa-solid fa-brain ml-2 text-cyan-500"></i> مستوى الذكاء اللحظي:</span>
+                            <span class="font-black text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-xl border border-cyan-500/30">12% كحد أقصى</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                            <span class="text-gray-400 font-bold"><i class="fa-solid fa-face-sad-cry ml-2 text-green-500"></i> مؤشر الندم الحالي:</span>
+                            <span class="font-black text-green-400 animate-pulse">9999% متصاعد</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                            <span class="text-gray-400 font-bold"><i class="fa-solid fa-shield-heart ml-2 text-premium-gold"></i> احتمالية النجاة:</span>
+                            <span class="font-black text-premium-gold text-glow-gold">قيد المراجعة القضائية</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center">
+                <button onclick="revealSection('section-evidence')" class="px-8 py-4 bg-white/5 hover:bg-white/10 rounded-xl font-bold border border-white/10 flex items-center gap-3 group transition-all">
+                    الذهاب إلى غرفة الأحراز والأدلة 
+                    <i class="fa-solid fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <section id="section-evidence" class="hidden opacity-0 space-y-6 scroll-mt-20">
+            <div class="text-center">
+                <span class="text-sm font-bold uppercase tracking-widest text-purple-500 bg-purple-500/10 px-4 py-1.5 rounded-full border border-purple-500/30">البند الثاني</span>
+                <h3 class="text-2xl md:text-4xl font-black mt-2">🔍 غرفة معاينة الأدلة الجنائية</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="evidence-card glass-card p-6 rounded-3xl border-r-4 border-r-pink-500 flex flex-col justify-between space-y-4 shadow-xl">
+                    <div class="text-4xl text-pink-500"><i class="fa-regular fa-file-lines"></i></div>
+                    <div class="space-y-2">
+                        <h4 class="font-black text-lg text-pink-400">📄 الدليل الرقمي الأول</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed">تكلم بسرعة فائقة دون تفعيل نظام التفكير المسبق أو استشارة مراكز الحكمة الداخلية.</p>
+                    </div>
+                </div>
+                <div class="evidence-card glass-card p-6 rounded-3xl border-r-4 border-r-purple-500 flex flex-col justify-between space-y-4 shadow-xl">
+                    <div class="text-4xl text-purple-500"><i class="fa-regular fa-file-lines"></i></div>
+                    <div class="space-y-2">
+                        <h4 class="font-black text-lg text-purple-400">📄 الدليل الميداني الثاني</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed">اكتشف فداحة الموقف متأخرًا جدًا بعد أن امتلأت الأجواء بغيوم الزعل الكثيفة.</p>
+                    </div>
+                </div>
+                <div class="evidence-card glass-card p-6 rounded-3xl border-r-4 border-r-orange-500 flex flex-col justify-between space-y-4 shadow-xl">
+                    <div class="text-4xl text-orange-500"><i class="fa-regular fa-file-lines"></i></div>
+                    <div class="space-y-2">
+                        <h4 class="font-black text-lg text-orange-400">📄 الدليل التحليلي الثالث</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed">حاول تقديم مبررات فاشلة من الناحية الهندسية، مما تسبب في تعقيد الوضع القانوني له وزيادة السوء.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl text-center border border-dashed border-white/20">
+                <p class="text-base md:text-lg font-bold text-gray-200">
+                    💡 <span class="text-premium-gold">تقرير المختبر:</span> تشير كامل البيانات والقرائن إلى أن المتهم لم يكن يبيت النية لأي ضرر، ولكنه ارتكب أخطاءً إدارية وتعبيرية جسيمة تستوجب العقاب اللطيف.
+                </p>
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="revealSection('section-analysis'); fillProgressBars();" class="px-8 py-4 bg-white/5 hover:bg-white/10 rounded-xl font-bold border border-white/10 flex items-center gap-3 group transition-all">
+                    الانتقال إلى تحليل الإحصائيات والخبراء
+                    <i class="fa-solid fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <section id="section-analysis" class="hidden opacity-0 space-y-6 scroll-mt-20">
+            <div class="text-center">
+                <span class="text-sm font-bold uppercase tracking-widest text-cyan-500 bg-cyan-500/10 px-4 py-1.5 rounded-full border border-cyan-500/30">البند الثالث</span>
+                <h3 class="text-2xl md:text-4xl font-black mt-2">📊 التقرير التحليلي النهائي للمشكلة</h3>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">
+                <div class="space-y-2">
+                    <div class="flex justify-between font-bold text-sm md:text-base">
+                        <span class="text-red-400"><i class="fa-solid fa-bolt ml-1"></i> نسبة التسرع العشوائي:</span>
+                        <span>100% كاملة مكملة</span>
+                    </div>
+                    <div class="w-full bg-white/5 rounded-full h-4 overflow-hidden border border-white/5 p-0.5">
+                        <div id="bar-rushing" class="bg-gradient-to-r from-red-500 to-pink-500 h-full rounded-full w-0 transition-all duration-1000"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between font-bold text-sm md:text-base">
+                        <span class="text-green-400"><i class="fa-solid fa-face-sad-sweat ml-1"></i> نسبة الندم الداخلي الرادع:</span>
+                        <span>1000% مبالغ فيها</span>
+                    </div>
+                    <div class="w-full bg-white/5 rounded-full h-4 overflow-hidden border border-white/5 p-0.5">
+                        <div id="bar-remorse" class="bg-gradient-to-r from-green-500 to-emerald-500 h-full rounded-full w-0 transition-all duration-1000"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between font-bold text-sm md:text-base">
+                        <span class="text-cyan-400"><i class="fa-solid fa-tools ml-1"></i> رغبة محاولة الإصلاح وترطيب الأجواء:</span>
+                        <span>∞ لا نهائية مطلقة</span>
+                    </div>
+                    <div class="w-full bg-white/5 rounded-full h-4 overflow-hidden border border-white/5 p-0.5">
+                        <div id="bar-fix" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full w-0 transition-all duration-1000"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 text-center">
+                <p class="font-medium text-gray-200">
+                    📋 <span class="font-black text-cyan-400">توصية اللجنة الاستشارية:</span> بعد تشريح الحالة السلوكية، أقر الخبراء بالإجماع أن المتهم يحتاج فوراً إلى تحديث عاجل لنظام اتخاذ القرار مع فرض غرامة ترضية عاجلة.
+                </p>
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="revealSection('section-compensation')" class="px-8 py-4 bg-gradient-to-r from-pink-600/20 to-purple-600/20 hover:from-pink-600/30 hover:to-purple-600/30 rounded-xl font-bold border border-pink-500/30 flex items-center gap-3 group transition-all shadow-lg shadow-pink-900/20">
+                    العبور إلى قطاع التعويضات الفورية والتسوية 💸
+                </button>
+            </div>
+        </section>
+
+
+        <section id="section-compensation" class="hidden opacity-0 space-y-8 scroll-mt-20">
+            <div class="text-center">
+                <span class="text-sm font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-4 py-1.5 rounded-full border border-emerald-500/30">قسم جبر الخواطر</span>
+                <h3 class="text-2xl md:text-4xl font-black mt-2">💸 مصلحة صرف التعويضات والترضية الرسمية</h3>
+            </div>
+
+            <div class="text-center py-4">
+                <p class="text-gray-300 max-w-lg mx-auto">
+                    اضغطي على الزر الفاخر المضيء بالأسفل لتفعيل الحزمة الشاملة لتعويضات الأضرار النفسية والاجتماعية المسجلة.
+                </p>
+            </div>
+
+            <div class="flex justify-center py-6 relative">
+                <div class="absolute -inset-4 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+                <button id="payout-compensation-btn" class="relative px-14 py-8 bg-gradient-to-r from-pink-600 via-red-500 to-rose-600 rounded-full text-2xl md:text-3xl font-black tracking-wide shadow-[0_0_50px_rgba(219,39,119,0.5)] hover:shadow-[0_0_70px_rgba(219,39,119,0.8)] transform hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-white/20">
+                    🌹 صرف التعويضات الرسمية 🌹
+                </button>
+            </div>
+
+            <div id="live-payout-box" class="hidden glass-card rounded-3xl p-6 min-h-[120px] flex flex-col items-center justify-center space-y-4 text-center border border-pink-500/30 shadow-2xl relative overflow-hidden">
+                <div id="payout-status-text" class="text-xl font-bold text-pink-400 animate-pulse">
+                    في انتظار إشارة البدء الآمن...
+                </div>
+                
+                <div id="payout-messages-list" class="w-full max-w-md space-y-2 text-sm md:text-base"></div>
+            </div>
+
+            <div id="grand-bouquet-stage" class="relative hidden w-full min-h-[400px] bg-gradient-to-b from-transparent to-pink-950/20 rounded-3xl flex flex-col items-center justify-center overflow-hidden border border-white/5">
+                
+                <div id="comedy-gift-box" class="absolute text-8xl md:text-9xl cursor-pointer select-none z-30 drop-shadow-[0_20px_30px_rgba(0,0,0,0.7)]" style="display:none;">
+                    🎁
+                </div>
+
+                <div id="giant-bouquet" class="absolute z-20 text-center scale-0 origin-bottom select-none" style="display:none; bottom: 10%;">
+                    <div class="text-[9rem] md:text-[14rem] leading-none filter drop-shadow-[0_10px_20px_rgba(219,39,119,0.5)]">💐</div>
+                    <div class="text-[5rem] md:text-[7rem] -mt-16 md:-mt-24 flex justify-center gap-2 animate-bounce">🌹🌷🌹</div>
+                </div>
+
+                <div id="bouquet-summary-msg" class="absolute bottom-6 left-4 right-4 text-center p-4 glass-card rounded-xl border border-white/10 opacity-0 transform translate-y-4 z-30">
+                    <p class="font-bold text-pink-300 text-base md:text-lg">
+                        💝 النتيجة الميدانية: يبدو صراحة وبما لا يدع مجالاً للشك أن المتهم يسعى جاهداً وبكل الطرق المتاحة والمبتكرة لاستعادة السلام وكسر حاجز الجفاء كلياً!
+                    </p>
+                </div>
+            </div>
+
+            <div id="next-to-decision-wrapper" class="hidden justify-center opacity-0">
+                <button onclick="revealSection('section-verdict')" class="px-10 py-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xl font-black rounded-2xl shadow-xl transition-all duration-300 transform active:scale-95">
+                    الذهاب لجلسة النطق بالحكم النهائي ⚖️
+                </button>
+            </div>
+        </section>
+
+
+        <section id="section-verdict" class="hidden opacity-0 space-y-6 scroll-mt-20">
+            <div class="text-center">
+                <span class="text-sm font-bold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/30">الحكم القطعي</span>
+                <h3 class="text-2xl md:text-4xl font-black mt-2">⚖️ وثيقة قرار اللجنة العليا المشتركة</h3>
+            </div>
+
+            <div class="glass-card rounded-[2.5rem] p-6 md:p-10 border border-white/10 shadow-2xl relative overflow-hidden bg-gradient-to-b from-white/5 to-transparent">
+                <div class="absolute top-4 left-4 text-6xl text-premium-gold/10 font-black"><i class="fa-solid fa-stamp"></i></div>
+                
+                <div class="space-y-6 max-w-2xl mx-auto text-center md:text-right">
+                    <h4 class="text-xl font-black text-premium-gold text-glow-gold border-b border-white/10 pb-4 flex items-center justify-center md:justify-start gap-2">
+                        <i class="fa-solid fa-scroll"></i> منطوق الحيثيات والقرار الرسمي المعتمد:
+                    </h4>
+                    
+                    <ul class="space-y-4 text-base md:text-lg font-medium text-gray-200 list-none pr-0">
+                        <li class="flex items-start gap-3">
+                            <span class="text-emerald-500 text-xl mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>بعد تفكيك ومراجعة كافة ملابسات القضية والقرائن اللفظية المسجلة...</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-pink-500 text-xl mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>ثبت للجنة بما لا يدع مجالاً للشك أن المشتبه به قد تسرع وأخطأ فعلاً في الإدارة والتعبير.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-cyan-500 text-xl mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span>ولكن، نظير إبدائه لمستويات قياسية من الندم الصادق ومحاولات التكفير الرقمية والميدانية الموثقة...</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mt-8 flex justify-center">
+                    <button id="ratify-decision-btn" class="group relative px-12 py-5 bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 rounded-2xl text-xl font-black shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.6)] transform hover:scale-103 transition-all duration-300">
+                        ✅ اعتماد قرار اللجنة النهائي والإغلاق
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="grand-finale-screen" class="hidden glass-card rounded-[3rem] p-8 md:p-12 border-2 border-emerald-500/30 text-center space-y-8 bg-gradient-to-b from-emerald-950/20 to-transparent shadow-[0_0_80px_rgba(16,185,129,0.2)] scroll-mt-20">
+            <div class="inline-block p-6 bg-emerald-500/10 rounded-full border border-emerald-500/30 text-6xl md:text-7xl animate-bounce">
+                🏆
+            </div>
+            
+            <div class="space-y-2">
+                <h2 class="text-3xl md:text-5xl font-black text-emerald-400 text-glow">القرار النهائي الحاسم</h2>
+                <p class="text-xl font-bold text-premium-gold">تم قبول الاعتذار رسمياً مع مرتبة الرأفة 🌟</p>
+            </div>
+
+            <div class="max-w-xl mx-auto p-6 bg-white/5 rounded-3xl border border-white/5 text-lg md:text-xl font-bold text-gray-200 space-y-3 leading-relaxed">
+                <p class="text-emerald-300">🎉 تم حفظ البلاغ وإغلاق القضية بنجاح مطلق.</p>
+                <p>⚠️ يُنصح المتهم بشدة بتفعيل ميزة التفكير الذكي والهدوء قبل الكلام مستقبلاً لحفظ الأمن العام.</p>
+                <p class="text-pink-400 font-aref text-2xl pt-2">وشكراً جزيلاً لتعاون الجميع 😂🌹❤️</p>
+            </div>
+
+            <div class="pt-4">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => location.reload(), 1000);" class="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm text-gray-400 font-bold transition-all">
+                    <i class="fa-solid fa-rotate-left ml-1"></i> إعادة تشغيل منصة التحقيق
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 py-3 bg-premium-dark/80 backdrop-blur-md text-center text-xs text-gray-500 border-t border-white/5 z-40">
+        منصة التحقيق الكوميدية التفاعلية • صُنعت بروح الدعابة والاعتذار الخالص 🌹
+    </footer>
+
+    <script>
+        // Smooth scrolling using GSAP Plugin safely
+        document.addEventListener("DOMContentLoaded", () => {
+            // Ambient floating background elements spawn
+            initAmbientParticles();
+
+            // Core Navigation Triggers
+            document.getElementById('start-investigation-btn').addEventListener('click', () => {
+                revealSection('section-profile');
+                gsap.to(window, {duration: 1, scrollTo: "#section-profile", ease: "power2.inOut"});
+            });
+
+            // Compensation Core Sequence Engine
+            document.getElementById('payout-compensation-btn').addEventListener('click', function() {
+                this.disabled = true; // prevent multiple triggers
+                gsap.to(this, {scale: 0.9, opacity: 0.5, duration: 0.2});
+                
+                // Show payout box
+                const liveBox = document.getElementById('live-payout-box');
+                liveBox.classList.remove('hidden');
+                
+                // Start Stage Orchestration
+                document.getElementById('grand-bouquet-stage').classList.remove('hidden');
+                
+                triggerSequenceCompensation();
+            });
+
+            // Final Ratification Decision Handler
+            document.getElementById('ratify-decision-btn').addEventListener('click', () => {
+                revealSection('grand-finale-screen');
+                gsap.to(window, {duration: 1, scrollTo: "#grand-finale-screen", ease: "power3.inOut"});
+                triggerUltimateCelebration();
+            });
+        });
+
+        // Ambient System Builder
+        function initAmbientParticles() {
+            const container = document.getElementById('particle-container');
+            const icons = ['🌹', '✨', '💖', '🧸', '🌸'];
+            for (let i = 0; i < 20; i++) {
+                const el = document.createElement('div');
+                el.className = 'particle opacity-20 text-xl';
+                el.innerText = icons[Math.floor(Math.random() * icons.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.top = Math.random() * 100 + 'vh';
+                container.appendChild(el);
+                
+                // Subtle random floating
+                gsap.to(el, {
+                    x: '+=50',
+                    y: '-=80',
+                    rotation: '+=360',
+                    duration: 5 + Math.random() * 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+            }
+        }
+
+        // Section Reveal Mechanics
+        function revealSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                gsap.fromTo(section, {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.8, ease: "power2.out"});
+            }
+        }
+
+        // Fill Progress Bars Action
+        function fillProgressBars() {
+            setTimeout(() => {
+                document.getElementById('bar-rushing').style.width = '100%';
+                document.getElementById('bar-remorse').style.width = '100%';
+                document.getElementById('bar-fix').style.width = '100%';
+            }, 300);
+        }
+
+        // Compensation Flow Engine
+        function triggerSequenceCompensation() {
+            const statusText = document.getElementById('payout-status-text');
+            const msgList = document.getElementById('payout-messages-list');
+            
+            const steps = [
+                { text: "⚡ جاري تحويل التعويضات وجبر الخواطر الرقمية...", delay: 500 },
+                { text: "🔹 تم إرسال 100 وردة بنجاح أولي.", delay: 2000 },
+                { text: "🔹 تم إرسال 500 وردة لدعم توازن المود.", delay: 3500 },
+                { text: "🔹 تم إرسال 1000 وردة فاخرة الآن تلقائياً.", delay: 5000 },
+                { text: "⚠️ عدد الورود المرسلة تجاوز الحد المسموح به في النظام الجغرافي البصري 😂", delay: 6500 }
+            ];
+
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    statusText.innerText = index === steps.length - 1 ? "✅ اكتملت الحوالة اللطيفة!" : "⚡ جاري معالجة مصفوفة الصلح...";
+                    
+                    const p = document.createElement('p');
+                    p.className = "text-emerald-400 font-bold bg-white/5 p-2 rounded-xl border border-white/5 transform translate-y-2 opacity-0 text-center";
+                    p.innerText = step.text;
+                    msgList.appendChild(p);
+                    gsap.to(p, {opacity: 1, y: 0, duration: 0.4});
+                    
+                    // Trigger confetti micor bursts on each progress step
+                    confetti({
+                        particleCount: 20,
+                        spread: 40,
+                        origin: { y: 0.8 }
+                    });
+
+                    // At the end of message text parameters, drop the gift box
+                    if(index === steps.length - 1) {
+                        setTimeout(dropComedyGiftBox, 1000);
+                    }
+                }, step.delay);
+            });
+        }
+
+        // Fall Box Mechanics
+        function dropComedyGiftBox() {
+            // Apply slight screen shake via GSAP
+            gsap.to("main", {x: 5, yoyo: true, repeat: 5, duration: 0.05, onComplete: () => gsap.set("main", {x: 0})});
+            
+            const box = document.getElementById('comedy-gift-box');
+            box.style.display = 'block';
+            
+            // Drop bounce timeline
+            gsap.fromTo(box, 
+                {y: -500, scale: 0.3, rotation: -45}, 
+                {y: 0, scale: 1, rotation: 0, duration: 1.2, ease: "bounce.out", onComplete: () => {
+                    // Make it wobble to invite a click or simulate dynamic impact
+                    gsap.to(box, {rotation: 5, repeat: 5, yoyo: true, duration: 0.1, onComplete: () => {
+                        // Automatically auto open the comedy box after 1 second
+                        setTimeout(openLuxuryBouquetScene, 800);
+                    }});
+                }}
+            );
+        }
+
+        // Open Bouquet Transformation Cascade
+        function openLuxuryBouquetScene() {
+            const box = document.getElementById('comedy-gift-box');
+            const bouquet = document.getElementById('giant-bouquet');
+            
+            // Pop box explosion effect
+            gsap.to(box, {scale: 1.4, opacity: 0, duration: 0.3, ease: "power1.in", onComplete: () => {
+                box.style.display = 'none';
+            }});
+
+            // Reveal Bouquet with majestic growth
+            bouquet.style.display = 'block';
+            gsap.fromTo(bouquet, 
+                {scale: 0, rotation: 180}, 
+                {scale: 1, rotation: 0, duration: 2.5, ease: "elastic.out(1, 0.5)", onComplete: () => {
+                    // Continuous floating sway animation for bouquet charm
+                    gsap.to(bouquet, {y: -15, duration: 2, yoyo: true, repeat: -1, ease: "sine.inOut"});
+                }}
+            );
+
+            // Explosive Canvas Confetti Matrix
+            const duration = 4 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                // Left side launch
+                confetti({
+                    particleCount: 6,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0.1, y: 0.7 },
+                    colors: ['#ff2d75', '#ff9ab0', '#ff0000', '#f5c842']
+                });
+                // Right side launch
+                confetti({
+                    particleCount: 6,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 0.9, y: 0.7 },
+                    colors: ['#ff2d75', '#ff9ab0', '#ff0000', '#f5c842']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // Spawn floating up rose petal clouds dynamically
+            spawnDenseRosePetalRain();
+            
+            // Spawn celebratory balloons
+            spawnFloatingBalloons();
+
+            // Fade in summary text message inside section
+            const summary = document.getElementById('bouquet-summary-msg');
+            gsap.to(summary, {opacity: 1, y: 0, duration: 0.8, delay: 1.5});
+
+            // Unlock path to final decision
+            const nextWrapper = document.getElementById('next-to-decision-wrapper');
+            nextWrapper.classList.remove('hidden');
+            gsap.to(nextWrapper, {opacity: 1, duration: 0.5, delay: 2.5});
+        }
+
+        // Custom Dense Rose Petal Rain generator
+        function spawnDenseRosePetalRain() {
+            const stage = document.getElementById('grand-bouquet-stage');
+            const emojis = ['🌹', '🌸', '🌷', '💖'];
+            for(let i=0; i<40; i++) {
+                setTimeout(() => {
+                    const petal = document.createElement('div');
+                    petal.className = 'absolute text-2xl pointer-events-none select-none z-30';
+                    petal.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    petal.style.left = Math.random() * 100 + '%';
+                    petal.style.top = '-5%';
+                    stage.appendChild(petal);
+
+                    gsap.to(petal, {
+                        y: 450,
+                        x: `+=${Math.random() * 60 - 30}`,
+                        rotation: Math.random() * 360,
+                        duration: 2.5 + Math.random() * 2,
+                        ease: "linear",
+                        onComplete: () => petal.remove()
+                    });
+                }, i * 80);
+            }
+        }
+
+        // Balloon System Generator
+        function spawnFloatingBalloons() {
+            const colors = ['🎈', '✨', '🎈', '💝'];
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon text-5xl';
+                    balloon.innerText = colors[Math.floor(Math.random() * colors.length)];
+                    balloon.style.left = (Math.random() * 90) + 'vw';
+                    document.body.appendChild(balloon);
+
+                    gsap.to(balloon, {
+                        y: -window.innerHeight - 200,
+                        x: `+=${Math.random() * 100 - 50}`,
+                        duration: 4 + Math.random() * 3,
+                        ease: "power1.out",
+                        onComplete: () => balloon.remove()
+                    });
+                }, i * 250);
+            }
+        }
+
+        // Ultimate Final Celebration Package
+        function triggerUltimateCelebration() {
+            // Fireworks loop confetti
+            const end = Date.now() + (5 * 1000);
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 80,
+                    origin: { x: 0, y: 0.6 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 80,
+                    origin: { x: 1, y: 0.6 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // Continuous background rain of hearts and roses for maximum comfort
+            const finaleSection = document.getElementById('grand-finale-screen');
+            setInterval(() => {
+                if(Date.now() < end + 5000) {
+                    const drop = document.createElement('div');
+                    drop.className = 'absolute text-xl pointer-events-none z-10 select-none';
+                    drop.innerHTML = ['🌹', '🎉', '👏', '❤️'][Math.floor(Math.random() * 4)];
+                    drop.style.left = Math.random() * 100 + '%';
+                    drop.style.top = '0%';
+                    finaleSection.appendChild(drop);
+
+                    gsap.to(drop, {
+                        y: finaleSection.offsetHeight,
+                        rotation: 360,
+                        duration: 3,
+                        ease: "linear",
+                        onComplete: () => drop.remove()
+                    });
+                }
+            }, 200);
+        }
+    </script>
+</body>
+</html>
